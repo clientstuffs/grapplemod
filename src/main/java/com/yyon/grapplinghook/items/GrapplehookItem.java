@@ -240,14 +240,14 @@ public class GrapplehookItem extends Item implements KeypressItem {
   		}
   		
   		LivingEntity player = entityLiving;
-  		
+
+		GrapplehookEntity hookEntity = this.createGrapplehookEntity(stack, worldIn, entityLiving, false, true);
   		Vec anglevec = Vec.fromAngles(Math.toRadians(-angle), Math.toRadians(verticalangle));
   		anglevec = anglevec.rotatePitch(Math.toRadians(-player.getViewXRot(1.0F)));
   		anglevec = anglevec.rotateYaw(Math.toRadians(player.getViewYRot(1.0F)));
         float velx = -Mth.sin((float) anglevec.getYaw() * 0.017453292F) * Mth.cos((float) anglevec.getPitch() * 0.017453292F);
         float vely = -Mth.sin((float) anglevec.getPitch() * 0.017453292F);
         float velz = Mth.cos((float) anglevec.getYaw() * 0.017453292F) * Mth.cos((float) anglevec.getPitch() * 0.017453292F);
-		GrapplehookEntity hookEntity = this.createGrapplehookEntity(stack, worldIn, entityLiving, false, true);
         float extravelocity = (float) Vec.motionVec(entityLiving).distAlong(new Vec(velx, vely, velz));
         if (extravelocity < 0) { extravelocity = 0; }
         hookEntity.shoot((double) velx, (double) vely, (double) velz, hookEntity.getVelocity() + extravelocity, 0.0F);
@@ -279,22 +279,21 @@ public class GrapplehookItem extends Item implements KeypressItem {
 	        float extravelocity = (float) Vec.motionVec(entityLiving).distAlong(new Vec(velx, vely, velz));
 	        if (extravelocity < 0) { extravelocity = 0; }
 	        hookEntity.shoot((double) velx, (double) vely, (double) velz, hookEntity.getVelocity() + extravelocity, 0.0F);
-			setHookEntityRight(entityLiving, hookEntity);
 			worldIn.addFreshEntity(hookEntity);
+			setHookEntityRight(entityLiving, hookEntity);
     	} else {
       		LivingEntity player = entityLiving;
-      		
+
+				GrapplehookEntity hookEntity = this.createGrapplehookEntity(stack, worldIn, entityLiving, true, true);
       		Vec anglevec = Vec.fromAngles(Math.toRadians(angle), Math.toRadians(verticalangle));
       		anglevec = anglevec.rotatePitch(Math.toRadians(-player.getViewXRot(1.0F)));
       		anglevec = anglevec.rotateYaw(Math.toRadians(player.getViewYRot(1.0F)));
 	        float velx = -Mth.sin((float) anglevec.getYaw() * 0.017453292F) * Mth.cos((float) anglevec.getPitch() * 0.017453292F);
 	        float vely = -Mth.sin((float) anglevec.getPitch() * 0.017453292F);
 	        float velz = Mth.cos((float) anglevec.getYaw() * 0.017453292F) * Mth.cos((float) anglevec.getPitch() * 0.017453292F);
-			GrapplehookEntity hookEntity = this.createGrapplehookEntity(stack, worldIn, entityLiving, true, true);
 	        float extravelocity = (float) Vec.motionVec(entityLiving).distAlong(new Vec(velx, vely, velz));
 	        if (extravelocity < 0) { extravelocity = 0; }
 	        hookEntity.shoot((double) velx, (double) vely, (double) velz, hookEntity.getVelocity() + extravelocity, 0.0F);
-            
 			worldIn.addFreshEntity(hookEntity);
 			setHookEntityRight(entityLiving, hookEntity);
 		}
