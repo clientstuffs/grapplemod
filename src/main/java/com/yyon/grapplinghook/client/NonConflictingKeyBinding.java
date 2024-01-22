@@ -10,12 +10,11 @@ public class NonConflictingKeyBinding extends KeyMapping {
 		this.setNonConflict();
 	}
 
-//	boolean isActive = false;
 	private void setNonConflict() {
 		this.setKeyConflictContext(new IKeyConflictContext() {
 			@Override
 			public boolean isActive() {
-				return false;
+				return true;
 			}
 			@Override
 			public boolean conflicts(IKeyConflictContext other) {
