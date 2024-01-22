@@ -6,7 +6,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraftforge.network.NetworkEvent;
+import net.minecraftforge.event.network.CustomPayloadEvent;
 
 /*
     GrappleMod is free software: you can redistribute it and/or modify
@@ -45,7 +45,7 @@ public class GrappleModifierMessage extends BaseMessageServer {
     	this.custom.writeToBuf(buf);
     }
 
-    public void processMessage(NetworkEvent.Context ctx) {
+    public void processMessage(CustomPayloadEvent.Context ctx) {
 		Level w = ctx.getSender().level();
 		
 		BlockEntity ent = w.getBlockEntity(this.pos);

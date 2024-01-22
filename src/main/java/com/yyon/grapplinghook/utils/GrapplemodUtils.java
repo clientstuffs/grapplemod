@@ -13,23 +13,22 @@ public class GrapplemodUtils {
 	public static void sendToCorrectClient(Object message, int playerid, Level w) {
 		Entity entity = w.getEntity(playerid);
 		if (entity instanceof ServerPlayer) {
-			CommonSetup.network.send(PacketDistributor.PLAYER.with(() -> (ServerPlayer) entity), message);
+			CommonSetup.network.send(
+				message,
+				PacketDistributor.PLAYER.with((ServerPlayer) entity)
+			);
 		} else {
 			System.out.println("ERROR! couldn't find player");
 		}
 	}
 
 	public static BlockHitResult rayTraceBlocks(Level world, Vec from, Vec to) {
-		HitResult result = world.clip(new ClipContext(from.toVec3d(), to.toVec3d(), ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, null));
-		if (result != null && result instanceof BlockHitResult) {
-			BlockHitResult blockhit = (BlockHitResult) result;
-			if (blockhit.getType() != HitResult.Type.BLOCK) {
-				return null;
-			}
-			return blockhit;
-		}
-		return null;
-	}
+		BlockHitResult result = world.clip(new ClipContext(from.toVec3d(), to.toVec3d(), ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, null));
+    if (result.getType() != HitResult.Type.BLOCK) {
+      return null;
+    }
+    return result;
+  }
 
 	public static long getTime(Level w) {
 		return w.getGameTime();

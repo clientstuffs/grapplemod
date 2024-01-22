@@ -23,16 +23,7 @@ import com.yyon.grapplinghook.items.upgrades.RopeUpgradeItem;
 import com.yyon.grapplinghook.items.upgrades.StaffUpgradeItem;
 import com.yyon.grapplinghook.items.upgrades.SwingUpgradeItem;
 import com.yyon.grapplinghook.items.upgrades.ThrowUpgradeItem;
-import com.yyon.grapplinghook.network.DetachSingleHookMessage;
-import com.yyon.grapplinghook.network.GrappleAttachMessage;
-import com.yyon.grapplinghook.network.GrappleAttachPosMessage;
-import com.yyon.grapplinghook.network.GrappleDetachMessage;
-import com.yyon.grapplinghook.network.GrappleEndMessage;
-import com.yyon.grapplinghook.network.GrappleModifierMessage;
-import com.yyon.grapplinghook.network.KeypressMessage;
-import com.yyon.grapplinghook.network.LoggedInMessage;
-import com.yyon.grapplinghook.network.PlayerMovementMessage;
-import com.yyon.grapplinghook.network.SegmentMessage;
+import com.yyon.grapplinghook.network.*;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -49,9 +40,7 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
-import net.minecraftforge.network.NetworkDirection;
-import net.minecraftforge.network.NetworkRegistry;
-import net.minecraftforge.network.simple.SimpleChannel;
+import net.minecraftforge.network.*;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
@@ -101,20 +90,60 @@ public class CommonSetup {
 
 	@SubscribeEvent
 	public static void init(FMLCommonSetupEvent event) {
-		network = NetworkRegistry.newSimpleChannel(simpleChannelRL, () -> "1.0",
-	            version -> true,
-	            version -> true);
-		int id = 0;
-		network.registerMessage(id++, PlayerMovementMessage.class, PlayerMovementMessage::encode, PlayerMovementMessage::new, PlayerMovementMessage::onMessageReceived, Optional.of(NetworkDirection.PLAY_TO_SERVER));
-		network.registerMessage(id++, GrappleEndMessage.class, GrappleEndMessage::encode, GrappleEndMessage::new, GrappleEndMessage::onMessageReceived, Optional.of(NetworkDirection.PLAY_TO_SERVER));
-		network.registerMessage(id++, GrappleModifierMessage.class, GrappleModifierMessage::encode, GrappleModifierMessage::new, GrappleModifierMessage::onMessageReceived, Optional.of(NetworkDirection.PLAY_TO_SERVER));
-		network.registerMessage(id++, KeypressMessage.class, KeypressMessage::encode, KeypressMessage::new, KeypressMessage::onMessageReceived, Optional.of(NetworkDirection.PLAY_TO_SERVER));
-		network.registerMessage(id++, GrappleAttachMessage.class, GrappleAttachMessage::encode, GrappleAttachMessage::new, GrappleAttachMessage::onMessageReceived, Optional.of(NetworkDirection.PLAY_TO_CLIENT));
-		network.registerMessage(id++, GrappleDetachMessage.class, GrappleDetachMessage::encode, GrappleDetachMessage::new, GrappleDetachMessage::onMessageReceived, Optional.of(NetworkDirection.PLAY_TO_CLIENT));
-		network.registerMessage(id++, DetachSingleHookMessage.class, DetachSingleHookMessage::encode, DetachSingleHookMessage::new, DetachSingleHookMessage::onMessageReceived, Optional.of(NetworkDirection.PLAY_TO_CLIENT));
-		network.registerMessage(id++, GrappleAttachPosMessage.class, GrappleAttachPosMessage::encode, GrappleAttachPosMessage::new, GrappleAttachPosMessage::onMessageReceived, Optional.of(NetworkDirection.PLAY_TO_CLIENT));
-		network.registerMessage(id++, SegmentMessage.class, SegmentMessage::encode, SegmentMessage::new, SegmentMessage::onMessageReceived, Optional.of(NetworkDirection.PLAY_TO_CLIENT));
-		network.registerMessage(id++, LoggedInMessage.class, LoggedInMessage::encode, LoggedInMessage::new, LoggedInMessage::onMessageReceived, Optional.of(NetworkDirection.PLAY_TO_CLIENT));
+		network = ChannelBuilder.named(simpleChannelRL)
+			.networkProtocolVersion(1)
+			.acceptedVersions((status, version) -> true)
+			.simpleChannel()
+			.messageBuilder(PlayerMovementMessage.class, NetworkDirection.PLAY_TO_SERVER)
+			.encoder(PlayerMovementMessage::encode)
+			.decoder(PlayerMovementMessage::new)
+			.consumerMainThread(BaseMessageServer::onMessageReceived)
+			.add()
+			.messageBuilder(GrappleEndMessage.class, NetworkDirection.PLAY_TO_SERVER)
+			.encoder(GrappleEndMessage::encode)
+			.decoder(GrappleEndMessage::new)
+			.consumerMainThread(GrappleEndMessage::onMessageReceived)
+			.add()
+			.messageBuilder(GrappleModifierMessage.class, NetworkDirection.PLAY_TO_SERVER)
+			.encoder(GrappleModifierMessage::encode)
+			.decoder(GrappleModifierMessage::new)
+			.consumerMainThread(GrappleModifierMessage::onMessageReceived)
+			.add()
+			.messageBuilder(KeypressMessage.class, NetworkDirection.PLAY_TO_SERVER)
+			.encoder(KeypressMessage::encode)
+			.decoder(KeypressMessage::new)
+			.consumerMainThread(KeypressMessage::onMessageReceived)
+			.add()
+			.messageBuilder(GrappleAttachMessage.class, NetworkDirection.PLAY_TO_CLIENT)
+			.encoder(GrappleAttachMessage::encode)
+			.decoder(GrappleAttachMessage::new)
+			.consumerMainThread(GrappleAttachMessage::onMessageReceived)
+			.add()
+			.messageBuilder(GrappleDetachMessage.class, NetworkDirection.PLAY_TO_CLIENT)
+			.encoder(GrappleDetachMessage::encode)
+			.decoder(GrappleDetachMessage::new)
+			.consumerMainThread(GrappleDetachMessage::onMessageReceived)
+			.add()
+			.messageBuilder(DetachSingleHookMessage.class, NetworkDirection.PLAY_TO_CLIENT)
+			.encoder(DetachSingleHookMessage::encode)
+			.decoder(DetachSingleHookMessage::new)
+			.consumerMainThread(DetachSingleHookMessage::onMessageReceived)
+			.add()
+			.messageBuilder(GrappleAttachPosMessage.class, NetworkDirection.PLAY_TO_CLIENT)
+			.encoder(GrappleAttachPosMessage::encode)
+			.decoder(GrappleAttachPosMessage::new)
+			.consumerMainThread(GrappleAttachPosMessage::onMessageReceived)
+			.add()
+			.messageBuilder(SegmentMessage.class, NetworkDirection.PLAY_TO_CLIENT)
+			.encoder(SegmentMessage::encode)
+			.decoder(SegmentMessage::new)
+			.consumerMainThread(SegmentMessage::onMessageReceived)
+			.add()
+			.messageBuilder(LoggedInMessage.class, NetworkDirection.PLAY_TO_CLIENT)
+			.encoder(LoggedInMessage::encode)
+			.decoder(LoggedInMessage::new)
+			.consumerMainThread(LoggedInMessage::onMessageReceived)
+			.add();
 	}
 	
 

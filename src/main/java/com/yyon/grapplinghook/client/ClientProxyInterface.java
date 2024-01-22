@@ -11,8 +11,8 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.level.Level;
+import net.minecraftforge.event.network.CustomPayloadEvent;
 import net.minecraftforge.fml.DistExecutor;
-import net.minecraftforge.network.NetworkEvent;
 
 public abstract class ClientProxyInterface {
 	public static ClientProxyInterface proxy = DistExecutor.unsafeRunForDist(() -> ClientProxy::new, () -> () -> null);
@@ -57,7 +57,7 @@ public abstract class ClientProxyInterface {
 
 	public abstract void playDoubleJumpSound(Entity entity);
 
-	public abstract void onMessageReceivedClient(BaseMessageClient baseMessage, NetworkEvent.Context ctx);
+	public abstract void onMessageReceivedClient(BaseMessageClient baseMessage, CustomPayloadEvent.Context ctx);
 
 	public abstract void fillGrappleVariants(CreativeModeTab.Output items);
 	

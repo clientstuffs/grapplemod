@@ -3,10 +3,8 @@ package com.yyon.grapplinghook.network;
 import com.yyon.grapplinghook.grapplemod;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraftforge.event.network.CustomPayloadEvent;
 import net.minecraftforge.fml.LogicalSide;
-import net.minecraftforge.network.NetworkEvent;
-
-import java.util.function.Supplier;
 
 public abstract class BaseMessageServer {
 	public BaseMessageServer(FriendlyByteBuf buf) {
@@ -20,10 +18,9 @@ public abstract class BaseMessageServer {
 	
 	public abstract void encode(FriendlyByteBuf buf);
 
-    public abstract void processMessage(NetworkEvent.Context ctx);
+    public abstract void processMessage(CustomPayloadEvent.Context ctx);
     
-    public void onMessageReceived(Supplier<NetworkEvent.Context> ctxSupplier) {
-        NetworkEvent.Context ctx = ctxSupplier.get();
+    public void onMessageReceived(CustomPayloadEvent.Context ctx) {
         LogicalSide sideReceived = ctx.getDirection().getReceptionSide();
         if (sideReceived != LogicalSide.SERVER) {
 			grapplemod.LOGGER.warn("message received on wrong side:" + ctx.getDirection().getReceptionSide());

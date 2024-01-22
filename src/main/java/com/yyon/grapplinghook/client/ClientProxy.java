@@ -28,9 +28,10 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.item.crafting.RecipeManager;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.network.NetworkEvent;
+import net.minecraftforge.event.network.CustomPayloadEvent;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -97,7 +98,7 @@ public class ClientProxy extends ClientProxyInterface {
 	}
 
 	@Override
-	public void onMessageReceivedClient(BaseMessageClient msg, NetworkEvent.Context ctx) {
+	public void onMessageReceivedClient(BaseMessageClient msg, CustomPayloadEvent.Context ctx) {
 		msg.processMessage(ctx);
 	}
 
@@ -124,16 +125,19 @@ public class ClientProxy extends ClientProxyInterface {
 
 	@Override
 	public void fillGrappleVariants(CreativeModeTab.Output items) {
-		if (Minecraft.getInstance().isRunning() == false || Minecraft.getInstance().player == null || Minecraft.getInstance().player.level() == null || Minecraft.getInstance().player.level().getRecipeManager() == null) {
+		if (!Minecraft.getInstance().isRunning() || Minecraft.getInstance().player == null || Minecraft.getInstance().player.level() == null || Minecraft.getInstance().player.level().getRecipeManager() == null) {
 			return;
 		}
 		
 		if (grapplingHookVariants == null) {
-			grapplingHookVariants = new ArrayList<ItemStack>();
+			grapplingHookVariants = new ArrayList<>();
 			RecipeManager recipemanager = Minecraft.getInstance().player.level().getRecipeManager();
 			recipemanager.getRecipeIds().filter(loc -> loc.getNamespace().equals(grapplemod.MODID)).forEach(loc -> {
-				ItemStack stack = recipemanager.byKey(loc).get().getResultItem(Minecraft.getInstance().level.registryAccess());
-				if (stack.getItem() instanceof GrapplehookItem) {
+				ItemStack stack = recipemanager.byKey(loc)
+					.map(RecipeHolder::value)
+					.map(recipe -> recipe.getResultItem(Minecraft.getInstance().level.registryAccess()))
+					.orElse(null);
+				if (stack != null && stack.getItem() instanceof GrapplehookItem) {
 					if (!CommonSetup.grapplingHookItem.get().getCustomization(stack).equals(new GrappleCustomization())) {
 						grapplingHookVariants.add(stack);
 					}

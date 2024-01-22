@@ -34,7 +34,7 @@ public class ClientEventHandlers {
 	    MinecraftForge.EVENT_BUS.register(this);
 	}
 
-	public boolean prevKeys[] = {false, false, false, false, false};
+	public boolean[] prevKeys = {false, false, false, false, false};
 	
 	@SubscribeEvent
 	public void onClientTick(TickEvent.ClientTickEvent event) {
@@ -45,7 +45,7 @@ public class ClientEventHandlers {
 				
 				if (Minecraft.getInstance().screen == null) {
 					// keep in same order as enum from KeypressItem
-					boolean keys[] = {ClientSetup.key_enderlaunch.isDown(), ClientSetup.key_leftthrow.isDown(), ClientSetup.key_rightthrow.isDown(), ClientSetup.key_boththrow.isDown(), ClientSetup.key_rocket.isDown()};
+					boolean[] keys = {ClientSetup.key_enderlaunch.isDown(), ClientSetup.key_leftthrow.isDown(), ClientSetup.key_rightthrow.isDown(), ClientSetup.key_boththrow.isDown(), ClientSetup.key_rocket.isDown()};
 					
 					for (int i = 0; i < keys.length; i++) {
 						boolean iskeydown = keys[i];

@@ -32,8 +32,8 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.shapes.VoxelShape;
+import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.entity.IEntityAdditionalSpawnData;
-import net.minecraftforge.network.NetworkHooks;
 import net.minecraftforge.network.PacketDistributor;
 
 import javax.annotation.Nonnull;
@@ -450,7 +450,10 @@ public class GrapplehookEntity extends ThrowableItemProjectile implements IEntit
 		GrapplemodUtils.sendToCorrectClient(new GrappleAttachMessage(this.getId(), this.position().x, this.position().y, this.position().z, this.getControlId(), this.shootingEntityID, blockpos, this.segmentHandler.segments, this.segmentHandler.segmentTopSides, this.segmentHandler.segmentBottomSides, this.customization), this.shootingEntityID, this.level());
 		
 		GrappleAttachPosMessage msg = new GrappleAttachPosMessage(this.getId(), this.position().x, this.position().y, this.position().z);
-		CommonSetup.network.send(PacketDistributor.TRACKING_CHUNK.with(() -> this.level().getChunkAt(BlockPos.containing(this.position().x, this.position().y, this.position().z))), msg);
+		CommonSetup.network.send(
+			msg,
+			PacketDistributor.TRACKING_CHUNK.with(this.level().getChunkAt(BlockPos.containing(this.position().x, this.position().y, this.position().z)))
+		);
 	}
 	
 	public void clientAttach(double x, double y, double z) {
@@ -534,7 +537,7 @@ public class GrapplehookEntity extends ThrowableItemProjectile implements IEntit
 	@Nonnull
 	@Override
 	public Packet<ClientGamePacketListener> getAddEntityPacket() {
-		  return NetworkHooks.getEntitySpawningPacket(this);
+		  return ForgeHooks.getEntitySpawnPacket(this);
 	}
 
 	@Override

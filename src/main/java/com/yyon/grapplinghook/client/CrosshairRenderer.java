@@ -43,15 +43,19 @@ public class CrosshairRenderer {
 		Options gamesettings = this.mc.options;
         if (!gamesettings.getCameraType().isFirstPerson()) return;
         if (this.mc.player.isSpectator()) return;
-        if (gamesettings.renderDebug && !gamesettings.hideGui && !this.mc.player.isReducedDebugInfo() && !gamesettings.reducedDebugInfo().get()) return;
+        if (Minecraft.getInstance().getDebugOverlay().showDebugScreen() && !gamesettings.hideGui && !this.mc.player.isReducedDebugInfo() && !gamesettings.reducedDebugInfo().get()) return;
 
 		if (event.getOverlay() == VanillaGuiOverlay.CROSSHAIR.type()) {
 			LocalPlayer player = this.mc.player;
 			ItemStack grapplehookItemStack = null;
-			if ((player.getItemInHand(InteractionHand.MAIN_HAND) != null && player.getItemInHand(InteractionHand.MAIN_HAND).getItem() instanceof GrapplehookItem)) {
-				grapplehookItemStack = player.getItemInHand(InteractionHand.MAIN_HAND);
-			} else if ((player.getItemInHand(InteractionHand.OFF_HAND) != null && player.getItemInHand(InteractionHand.OFF_HAND).getItem() instanceof GrapplehookItem)) {
-				grapplehookItemStack = player.getItemInHand(InteractionHand.OFF_HAND);
+			final var itemInHand = player.getItemInHand(InteractionHand.MAIN_HAND);
+			if (itemInHand.getItem() instanceof GrapplehookItem) {
+				grapplehookItemStack = itemInHand;
+			} else {
+				final var itemInHand1 = player.getItemInHand(InteractionHand.OFF_HAND);
+				if (itemInHand1.getItem() instanceof GrapplehookItem) {
+					grapplehookItemStack = itemInHand1;
+				}
 			}
 			
 			if (grapplehookItemStack != null) {

@@ -12,6 +12,7 @@ import com.yyon.grapplinghook.server.ServerControllerManager;
 import com.yyon.grapplinghook.utils.GrappleCustomization;
 import com.yyon.grapplinghook.utils.GrapplemodUtils;
 import com.yyon.grapplinghook.utils.Vec;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.NonNullList;
@@ -29,6 +30,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.network.PacketDistributor;
 
 import javax.annotation.Nullable;
 import java.util.HashMap;
@@ -122,7 +124,7 @@ public class GrapplehookItem extends Item implements KeypressItem {
 					ClientProxyInterface.proxy.launchPlayer(player);
 				}
 			} else if (key == KeypressItem.Keys.THROWLEFT || key == KeypressItem.Keys.THROWRIGHT || key == KeypressItem.Keys.THROWBOTH) {
-				CommonSetup.network.sendToServer(new KeypressMessage(key, true));
+				CommonSetup.network.send(new KeypressMessage(key, true), Minecraft.getInstance().getConnection().getConnection());
 			} else if (key == KeypressItem.Keys.ROCKET) {
 				GrappleCustomization custom = this.getCustomization(stack);
 				if (custom.rocket) {
@@ -176,7 +178,7 @@ public class GrapplehookItem extends Item implements KeypressItem {
 	public void onCustomKeyUp(ItemStack stack, Player player, KeypressItem.Keys key, boolean ismainhand) {
 		if (player.level().isClientSide) {
 			if (key == KeypressItem.Keys.THROWLEFT || key == KeypressItem.Keys.THROWRIGHT || key == KeypressItem.Keys.THROWBOTH) {
-				CommonSetup.network.sendToServer(new KeypressMessage(key, false));
+				CommonSetup.network.send(new KeypressMessage(key, false), Minecraft.getInstance().getConnection().getConnection());
 			}
 		} else {
 	    	GrappleCustomization custom = this.getCustomization(stack);

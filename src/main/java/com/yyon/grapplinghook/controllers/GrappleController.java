@@ -22,6 +22,7 @@ import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.VoxelShape;
+import net.minecraftforge.network.PacketDistributor;
 
 import java.util.HashSet;
 
@@ -99,7 +100,7 @@ public class GrappleController {
 			this.attached = false;
 			
 			if (this.controllerId != GrapplemodUtils.AIRID) {
-				CommonSetup.network.sendToServer(new GrappleEndMessage(this.entityId, this.grapplehookEntityIds));
+				CommonSetup.network.send(new GrappleEndMessage(this.entityId, this.grapplehookEntityIds), Minecraft.getInstance().getConnection().getConnection());
 				ClientProxyInterface.proxy.createControl(GrapplemodUtils.AIRID, -1, this.entityId, this.entity.level(), new Vec(0,0,0), null, this.custom);
 			}
 		}
@@ -688,7 +689,10 @@ public class GrappleController {
 	}
 	
 	public void updateServerPos() {
-		CommonSetup.network.sendToServer(new PlayerMovementMessage(this.entityId, this.entity.position().x, this.entity.position().y, this.entity.position().z, this.entity.getDeltaMovement().x, this.entity.getDeltaMovement().y, this.entity.getDeltaMovement().z));
+		CommonSetup.network.send(
+			new PlayerMovementMessage(this.entityId, this.entity.position().x, this.entity.position().y, this.entity.position().z, this.entity.getDeltaMovement().x, this.entity.getDeltaMovement().y, this.entity.getDeltaMovement().z),
+			Minecraft.getInstance().getConnection().getConnection()
+		);
 	}
 	
 	// Vector stuff:

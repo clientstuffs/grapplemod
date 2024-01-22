@@ -3,7 +3,7 @@ package com.yyon.grapplinghook.network;
 import com.yyon.grapplinghook.utils.Vec;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraftforge.network.NetworkEvent;
+import net.minecraftforge.event.network.CustomPayloadEvent;
 
 /*
  * This file is part of GrappleMod.
@@ -72,7 +72,7 @@ public class PlayerMovementMessage extends BaseMessageServer {
         
     }
 
-    public void processMessage(NetworkEvent.Context ctx) {
+    public void processMessage(CustomPayloadEvent.Context ctx) {
     	final ServerPlayer referencedPlayer = ctx.getSender();
         
 		if(referencedPlayer.getId() == this.entityId) {

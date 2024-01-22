@@ -121,7 +121,10 @@ public class CommonEventHandlers {
 	@SubscribeEvent
 	public void onPlayerLoggedInEvent(PlayerLoggedInEvent e) {
 		if (e.getEntity() instanceof ServerPlayer) {
-			CommonSetup.network.send(PacketDistributor.PLAYER.with(() -> (ServerPlayer) e.getEntity()), new LoggedInMessage(GrappleConfig.getConf()));
+			CommonSetup.network.send(
+				new LoggedInMessage(GrappleConfig.getConf()),
+				PacketDistributor.PLAYER.with((ServerPlayer) e.getEntity())
+			);
 		} else {
 			System.out.println("Not an PlayerEntityMP");
 		}

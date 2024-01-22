@@ -4,12 +4,14 @@ import com.yyon.grapplinghook.common.CommonSetup;
 import com.yyon.grapplinghook.network.GrappleModifierMessage;
 import com.yyon.grapplinghook.utils.GrappleCustomization;
 import com.yyon.grapplinghook.utils.GrappleCustomization.upgradeCategories;
+import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.Connection;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraftforge.network.PacketDistributor;
 
 import javax.annotation.Nullable;
 import java.util.HashMap;
@@ -31,7 +33,10 @@ public class TileEntityGrappleModifier extends BlockEntity {
 
 	public void setCustomizationClient(GrappleCustomization customization) {
 		this.customization = customization;
-		CommonSetup.network.sendToServer(new GrappleModifierMessage(this.worldPosition, this.customization));
+		CommonSetup.network.send(
+			new GrappleModifierMessage(this.worldPosition, this.customization),
+			Minecraft.getInstance().getConnection().getConnection()
+		);
 		this.sendUpdates();
 	}
 

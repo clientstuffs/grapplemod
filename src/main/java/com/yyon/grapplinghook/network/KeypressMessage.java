@@ -6,7 +6,7 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.network.NetworkEvent;
+import net.minecraftforge.event.network.CustomPayloadEvent;
 
 /*
  * This file is part of GrappleMod.
@@ -50,7 +50,7 @@ public class KeypressMessage extends BaseMessageServer {
     }
 
 	@Override
-    public void processMessage(NetworkEvent.Context ctx) {
+    public void processMessage(CustomPayloadEvent.Context ctx) {
     	final ServerPlayer player = ctx.getSender();
         
 		if (player != null) {

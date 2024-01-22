@@ -58,7 +58,7 @@ public class BlockGrappleModifier extends BaseEntityBlock {
 		List<ItemStack> drops = new ArrayList<ItemStack>();
 		drops.add(new ItemStack(this.asItem()));
 		BlockEntity ent = lootctx.getOptionalParameter(LootContextParams.BLOCK_ENTITY);
-		if (ent == null || !(ent instanceof TileEntityGrappleModifier)) {
+		if (!(ent instanceof TileEntityGrappleModifier)) {
 			return drops;
 		}
 		TileEntityGrappleModifier tileent = (TileEntityGrappleModifier) ent;

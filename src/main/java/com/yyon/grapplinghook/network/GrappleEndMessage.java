@@ -4,7 +4,7 @@ import com.yyon.grapplinghook.server.ServerControllerManager;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.network.NetworkEvent;
+import net.minecraftforge.event.network.CustomPayloadEvent;
 
 import java.util.HashSet;
 
@@ -56,7 +56,7 @@ public class GrappleEndMessage extends BaseMessageServer {
     	}
     }
 
-    public void processMessage(NetworkEvent.Context ctx) {
+    public void processMessage(CustomPayloadEvent.Context ctx) {
 		int id = this.entityId;
 		
 		ServerPlayer player = ctx.getSender();

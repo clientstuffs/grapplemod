@@ -158,7 +158,10 @@ public class SegmentHandler {
 		if (!this.world.isClientSide) {
 			SegmentMessage addmessage = new SegmentMessage(this.hookEntity.getId(), false, index, new Vec(0, 0, 0), Direction.DOWN, Direction.DOWN);
 			Vec playerpoint = Vec.positionVec(this.hookEntity.shootingEntity);
-			CommonSetup.network.send(PacketDistributor.TRACKING_CHUNK.with(() -> world.getChunkAt(BlockPos.containing(playerpoint.x, playerpoint.y, playerpoint.z))), addmessage);
+			CommonSetup.network.send(
+				addmessage,
+				PacketDistributor.TRACKING_CHUNK.with(world.getChunkAt(BlockPos.containing(playerpoint.x, playerpoint.y, playerpoint.z)))
+			);
 		}
 	}
 	
@@ -287,7 +290,10 @@ public class SegmentHandler {
 		if (!this.world.isClientSide) {
 			SegmentMessage addmessage = new SegmentMessage(this.hookEntity.getId(), true, index, bendpoint, topside, bottomside);
 			Vec playerpoint = Vec.positionVec(this.hookEntity.shootingEntity);
-			CommonSetup.network.send(PacketDistributor.TRACKING_CHUNK.with(() -> world.getChunkAt(BlockPos.containing(playerpoint.x, playerpoint.y, playerpoint.z))), addmessage);
+			CommonSetup.network.send(
+				addmessage,
+				PacketDistributor.TRACKING_CHUNK.with(world.getChunkAt(BlockPos.containing(playerpoint.x, playerpoint.y, playerpoint.z)))
+			);
 		}
 	}
 	

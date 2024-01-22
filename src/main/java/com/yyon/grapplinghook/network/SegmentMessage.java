@@ -10,7 +10,7 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.network.NetworkEvent;
+import net.minecraftforge.event.network.CustomPayloadEvent;
 
 /*
  * This file is part of GrappleMod.
@@ -72,7 +72,7 @@ public class SegmentMessage extends BaseMessageClient {
     }
 
     @OnlyIn(Dist.CLIENT)
-    public void processMessage(NetworkEvent.Context ctx) {
+    public void processMessage(CustomPayloadEvent.Context ctx) {
     	Level world = Minecraft.getInstance().level;
     	Entity grapple = world.getEntity(this.id);
     	if (grapple == null) {
