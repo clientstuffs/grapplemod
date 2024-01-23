@@ -3,6 +3,7 @@ package com.yyon.grapplinghook.client;
 import com.mojang.blaze3d.platform.InputConstants;
 import net.minecraft.client.KeyMapping;
 import net.minecraftforge.client.settings.IKeyConflictContext;
+import org.jetbrains.annotations.NotNull;
 
 public class NonConflictingKeyBinding extends KeyMapping {
 	public NonConflictingKeyBinding(String description, int keyCode, String category) {
@@ -40,9 +41,16 @@ public class NonConflictingKeyBinding extends KeyMapping {
    public boolean isDown() {
 	   return isDown;
    }
-   
-   @Override
+
+	@Override
+	public boolean isActiveAndMatches(@NotNull InputConstants.Key keyCode) {
+		return keyCode != InputConstants.UNKNOWN && keyCode.equals(getKey());
+	}
+
+	@Override
    public void setDown(boolean value) {
+		 if (isDown == value) return;
+		 System.out.println(isDown + " -> " + value);
 	   this.isDown = value;
    }
 }
