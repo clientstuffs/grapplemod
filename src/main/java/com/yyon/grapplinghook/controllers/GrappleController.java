@@ -41,7 +41,6 @@ public class GrappleController {
 	
 	public double playerForward = 0;
 	public double playerStrafe = 0;
-	public boolean playerJump = false;
 	public boolean playerSneak = false;
 	public Vec playerMovementUnrotated = new Vec(0,0,0);
 	public Vec playerMovement = new Vec(0,0,0);
@@ -221,21 +220,6 @@ public class GrappleController {
 						// handle keyboard input (jumping and climbing)
 						if (entity instanceof Player) {
 							Player player = (Player) entity;
-							boolean isjumping = ClientProxyInterface.proxy.isKeyDown(ClientProxyInterface.GrappleKeys.key_jumpanddetach);
-							isjumping = isjumping && !playerJump; // only jump once when key is first pressed
-							playerJump = ClientProxyInterface.proxy.isKeyDown(ClientProxyInterface.GrappleKeys.key_jumpanddetach);
-							if (isjumping) {
-								// jumping
-								if (onGroundTimer > 0) { // on ground: jump normally
-									
-								} else {
-									double timer = ClientProxyInterface.proxy.getTimeSinceLastRopeJump(this.entity.level());
-									if (timer > GrappleConfig.getConf().grapplinghook.other.rope_jump_cooldown_s * 20.0) {
-										doJump = true;
-										jumpSpeed = this.getJumpPower(player, spherevec, hookEntity);
-									}
-								}
-							}
 							if (ClientProxyInterface.proxy.isKeyDown(ClientProxyInterface.GrappleKeys.key_slow)) {
 								// slow down
 								Vec motiontorwards = spherevec.changeLen(-0.1);
@@ -942,15 +926,7 @@ public class GrappleController {
 	public boolean applyWallrun() {
 		boolean wallrun = this.isWallRunning();
 		
-		if (playerJump) {
-			if (wallrun) {
-				return false;
-			} else {
-				playerJump = false;
-			}
-		}
-		
-		if (wallrun && !ClientProxyInterface.proxy.isKeyDown(ClientProxyInterface.GrappleKeys.key_jumpanddetach)) {
+		if (wallrun) {
 
 			Vec wallside = this.getWallDirection();
 			if (wallside != null) {
@@ -961,9 +937,7 @@ public class GrappleController {
 				return false;
 			}
 
-			if (!playerJump) {
-				motion.y = 0;
-			}
+			motion.y = 0;
 
 			// drag
 			double dragforce = GrappleConfig.getConf().enchantments.wallrun.wallrun_drag;
@@ -993,23 +967,6 @@ public class GrappleController {
 					ticksSinceLastWallrunSoundEffect = 0;
 				}
 			}
-		}
-		
-		// jump
-		boolean isjumping = ClientProxyInterface.proxy.isKeyDown(ClientProxyInterface.GrappleKeys.key_jumpanddetach) && isOnWall;
-		isjumping = isjumping && !playerJump; // only jump once when key is first pressed
-		playerJump = ClientProxyInterface.proxy.isKeyDown(ClientProxyInterface.GrappleKeys.key_jumpanddetach) && isOnWall;
-		if (isjumping && wallrun) {
-			ClientProxyInterface.proxy.setWallrunTicks(0);
-			Vec jump = new Vec(0, GrappleConfig.getConf().enchantments.wallrun.wall_jump_up, 0);
-			if (wallDirection != null) {
-				jump.add_ip(wallDirection.mult(-GrappleConfig.getConf().enchantments.wallrun.wall_jump_side));
-			}
-			motion.add_ip(jump);
-			
-			wallrun = false;
-
-			ClientProxyInterface.proxy.playWallrunJumpSound(entity);
 		}
 		
 		return wallrun;

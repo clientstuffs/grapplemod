@@ -174,7 +174,7 @@ public class ClientControllerManager {
 					for (Enchantment enchant : enchantments.keySet()) {
 						if (enchant instanceof WallrunEnchantment) {
 							if (enchantments.get(enchant) >= 1) {
-								if (!ClientSetup.key_jumpanddetach.isDown() && !Minecraft.getInstance().options.keyJump.isDown()) {
+								if (!Minecraft.getInstance().options.keyJump.isDown()) {
 									BlockHitResult raytraceresult = GrapplemodUtils.rayTraceBlocks(entity.level(), Vec.positionVec(entity), Vec.positionVec(entity).add(new Vec(0, -1, 0)));
 									if (raytraceresult == null) {
 										double current_speed = Math.sqrt(Math.pow(motion.x, 2) + Math.pow(motion.z,  2));

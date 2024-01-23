@@ -66,7 +66,6 @@ public abstract class ClientProxyInterface {
 		key_leftthrow,
 		key_rightthrow,
 		key_motoronoff,
-		key_jumpanddetach,
 		key_slow,
 		key_climb,
 		key_climbup,

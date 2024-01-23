@@ -423,7 +423,6 @@ public class GrapplehookItem extends Item implements KeypressItem {
 					ClientProxyInterface.proxy.getKeyname(ClientProxyInterface.McKeys.keyBindBack) + ", " +
 					ClientProxyInterface.proxy.getKeyname(ClientProxyInterface.McKeys.keyBindRight) +
 					" " + ClientProxyInterface.proxy.localize("grappletooltip.swing.desc")));
-			list.add(Component.literal(ClientSetup.key_jumpanddetach.getTranslatedKeyMessage().getString() + " " + ClientProxyInterface.proxy.localize("grappletooltip.jump.desc")));
 			list.add(Component.literal(ClientSetup.key_slow.getTranslatedKeyMessage().getString() + " " + ClientProxyInterface.proxy.localize("grappletooltip.slow.desc")));
 			list.add(Component.literal(ClientSetup.key_climb.getTranslatedKeyMessage().getString() + " + " + ClientProxyInterface.proxy.getKeyname(ClientProxyInterface.McKeys.keyBindForward) + " / " +
 					ClientSetup.key_climbup.getTranslatedKeyMessage().getString() + 

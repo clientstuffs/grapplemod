@@ -194,7 +194,6 @@ public class ClientProxy extends ClientProxyInterface {
 		else if (key == ClientProxyInterface.GrappleKeys.key_leftthrow) {return ClientSetup.key_leftthrow.isDown();}
 		else if (key == ClientProxyInterface.GrappleKeys.key_rightthrow) {return ClientSetup.key_rightthrow.isDown();}
 		else if (key == ClientProxyInterface.GrappleKeys.key_motoronoff) {return ClientSetup.key_motoronoff.isDown();}
-		else if (key == ClientProxyInterface.GrappleKeys.key_jumpanddetach) {return ClientSetup.key_jumpanddetach.isDown();}
 		else if (key == ClientProxyInterface.GrappleKeys.key_slow) {return ClientSetup.key_slow.isDown();}
 		else if (key == ClientProxyInterface.GrappleKeys.key_climb) {return ClientSetup.key_climb.isDown();}
 		else if (key == ClientProxyInterface.GrappleKeys.key_climbup) {return ClientSetup.key_climbup.isDown();}
