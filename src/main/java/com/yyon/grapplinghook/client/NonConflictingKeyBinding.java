@@ -49,8 +49,6 @@ public class NonConflictingKeyBinding extends KeyMapping {
 
 	@Override
    public void setDown(boolean value) {
-		 if (isDown == value) return;
-		 System.out.println(isDown + " -> " + value);
 	   this.isDown = value;
    }
 }
